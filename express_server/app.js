@@ -20,10 +20,12 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
+var HOST = process.env.HOST || "http://critters.0xsilverfish.com";
+
 passport.use(
     new google_strategy({
-        returnURL: 'http://critters.0xsilverfish.com/auth/google/return',
-        realm: 'http://critters.0xsilverfish.com/'
+        returnURL: HOST + '/auth/google/return',
+        realm: HOST + '/'
     }, function(identifier, profile, done) {
         console.log(identifier + " HAS LOGGED IN!");
         // User.findOrCreate({ openId: identifier }, function(err, user) {
