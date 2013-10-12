@@ -1,9 +1,13 @@
 {
     "manifest_version": 2,
 
-    "name": "Critters",
+    "name": "Critter Crunch",
     "description": "Feed and breed your very own internet devouring critter!",
     "version": "0.1.2015",
+
+    "icons": { "16": "icon16.png",
+               "48": "icon48.png",
+               "128": "icon128.png" },
 
     "permissions": [
         "activeTab",
