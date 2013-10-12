@@ -97,11 +97,11 @@ function select_random(myArray) {
     return myArray[Math.floor(Math.random() * myArray.length)];
 }
 
-function critter_of_genome(genome, name) {
+function critter_of_genome(g, name) {
     return {
-        genome: genome,
-        species: genes.get_species(genome),
-        hue: genes.get_hue(genome),
+        genome: g,
+        species: genes.get_species(g),
+        hue: genes.get_hue(g),
         xp: 0,
         tier: 1,
         name: name

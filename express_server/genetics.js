@@ -73,7 +73,7 @@ function new_genome(species) { //here is a new thingy, make genome
         },
         "ninja": {
             s0: ['A', 'c'],
-            s1: ['g', 'g'],
+            s1: ['e', 'e'],
 
             h0: ['H', 'H'],
             h1: ['H', 'H'],
