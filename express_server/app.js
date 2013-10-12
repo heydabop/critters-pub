@@ -55,6 +55,9 @@ app.use(app.router);
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// apache go
+app.enable('trust proxy')
+
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
