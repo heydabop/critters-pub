@@ -10,11 +10,24 @@ var specs = ["ball", "ball2", "disk", "duck", "duck2", "plant-nin2", "plant1", "
 
 
 function new_genome(species) { //here is a new thingy, make genome
-
     var trans = { "plant1": "AbDf",
 		"plant2": "cbef" };
+	var trans1 = { "plant1" : "AAaaaa", "plant2": "aaAAaa" };
+	var trans2 = { "plant1" : "Da", "plant2": "Db" };
 		
 	var genome = { species : trans[species], hue: 0, colorPattern: 0 };
+	if(genome.species === undefined)
+	{
+	genome.species = "AaDd";
+	}
+	if(genome.hue === undefined)
+	{
+	genome.species = "AAaaaa";
+	}
+	if(genome.colorPattern === undefined)
+	{
+	genome.colorPattern = "Da";
+	}
 	genome.exprSpec = getPhenSpec(genome);
 	genome.exprHue = getPhenHue(genome);
 	genome.exprColorP = getPhenCP(genome);
@@ -106,29 +119,35 @@ function cross_spec(gen1, gen2) {
 	return genome;
 }
 
-// function cross_hue(gen1, gen2) {
-// loc1 = gen1.substr(0,2);
-// loc2 = gen1.substr(2,2);
-// loc3 = gen2.substr(0,2);
-// loc4 = gen2.substr(2,2);
-// allele1 = loc1.charAt(flipACoin());
-// allele2 = loc2.charAt(flipACoin());
-// allele3 = loc3.charAt(flipACoin());
-// allele4 = loc4.charAt(flipACoin());
-// specresult = allele1 + allele2 + allele3 + allele4;
-// }
+function cross_hue(gen1, gen2) {
+loc1 = gen1.substr(0,2);
+loc2 = gen1.substr(2,2);
+loc3 = gen1.substr(4,2);
+loc4 = gen2.substr(0,2);
+loc5 = gen2.substr(2,2);
+loc6 = gen2.substr(4,2);
+allele1 = loc1.charAt(flipACoin());
+allele2 = loc2.charAt(flipACoin());
+allele3 = loc3.charAt(flipACoin());
+allele4 = loc4.charAt(flipACoin());
+allele5 = loc5.charAt(flipACoin());
+allele6 = loc6.charAt(flipACoin());
+specresult = allele1 + allele2 + allele3 + allele4 + allele5 + allele6;
+}
 
-// function cross_CP(gen1){
-// loc1 = gen1.substr(0,2);
-// loc2 = gen1.substr(2,2);
-// loc3 = gen2.substr(0,2);
-// loc4 = gen2.substr(2,2);
-// allele1 = loc1.charAt(flipACoin());
-// allele2 = loc2.charAt(flipACoin());
-// allele3 = loc3.charAt(flipACoin());
-// allele4 = loc4.charAt(flipACoin());
-// specresult = allele1 + allele2 + allele3 + allele4;
-// }
+function cross_CP(gen1){
+loc1 = gen1.substr(0,2);
+loc2 = gen2.substr(0,2);
+allele1 = loc1.charAt(flipACoin());
+allele2 = loc2.charAt(flipACoin());
+specresult = allele1 + allele2;
+}
+
+function cross_genomes(genome1, genome2){
+cross_spec(genome1.species, genome2.species);
+cross_hue(genome1.hue, genome2.hue);
+cross_CP(genome1.colorPattern, genome2.colorPattern);
+}
 
 function get_starter_species() { //return list of starter species
     return ["plant1", "ball"];
