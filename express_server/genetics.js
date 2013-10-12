@@ -23,8 +23,20 @@ function get_starter_species() {
 
 function get_hue(genome) { return 0; }
 
-exports = { new_genome: new_genome,
-            get_species: get_species,
-            get_hue: get_hue,
-            cross_genomes: cross_genomes,
-            get_starter_species: get_starter_species }
+function evolve_species(species) {
+    var s;
+
+    do {
+        s = select_random(specs);
+    } while (s === species);
+
+    return s;
+}
+
+module.exports = { new_genome: new_genome,
+                   get_species: get_species,
+                   get_hue: get_hue,
+                   cross_genomes: cross_genomes,
+                   get_starter_species: get_starter_species,
+                   evolve_species: evolve_species
+                 }

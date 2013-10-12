@@ -8,6 +8,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var genes = require('./genetics');
 
 var passport = require('passport');
 var google_strategy = require('passport-google').Strategy;
@@ -31,7 +32,7 @@ passport.use(
         // });
 
         if (!(identifier in critterdb)) {
-            var newaccount = { team: [rand_starter()] };
+            var newaccount = { team: [rand_starter("Dogmeat")] };
             newaccount.team[0].xp = 20;
             critterdb[identifier] = newaccount;
         }
@@ -71,15 +72,15 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/auth/google', 
-        passport.authenticate('google', { failureRedirect: '/login' }),
+        passport.authenticate('google', { failureRedirect: '/' }),
         function(req, res) {
-            res.redirect('/');
+            res.redirect('/html/my/team');
         });
 
 app.get('/auth/google/return', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/html/my/team');
   });
 app.get('/logout', function(req, res){
   req.logout();
@@ -95,10 +96,22 @@ function select_random(myArray) {
     return myArray[Math.floor(Math.random() * myArray.length)];
 }
 
-var crittertypes = ["ball", "ball2", "disk", "duck", "duck2", "plant-nin2", "plant1", "plant2"];
-function rand_starter() {
-    var rand = select_random(crittertypes);
-    var critter = { species: rand, hue: 0, xp: 5 };
+function critter_of_genome(genome, name) {
+    return {
+        genome: genome,
+        species: genes.get_species(genome),
+        hue: genes.get_hue(genome),
+        xp: 0,
+        tier: 1,
+        name: name
+    };
+}
+
+function rand_starter(name) {
+    // Replace this with a more suitible selection mechanism
+    var spec = select_random(genes.get_starter_species());
+    // Use the species to create a new critter
+    var critter = critter_of_genome(genes.new_genome(spec), name);
     return critter;
 }
 
@@ -119,9 +132,12 @@ app.get('/:fmt/my/team', ensureAuthenticated, function (req, res) {
     }
 });
 app.post('/:fmt/my/team/push', ensureAuthenticated, function (req, res) {
+    if (req.body.name === undefined)
+        return res.redirect('/'+req.params.fmt+'/my/team');
+
     var team = critterdb[req.user.identifier].team;
     if (team.length < 4)
-        team.push(rand_starter());
+        team.push(rand_starter(req.body.name));
 
     res.redirect('/'+req.params.fmt+'/my/team');
 
@@ -157,10 +173,9 @@ app.post('/:fmt/evolve/:index', ensureAuthenticated, function (req, res) {
     // Process evolution
     // Perform actual data update
     var oldspecies = critter.species;
-    while (critter.species == oldspecies) {
-        critter.species = select_random(crittertypes);
-    }
+    critter.species = genes.evolve_species(critter.species);
     critter.xp = 0;
+    critter.tier = 2;
 
     // If requested, send the user a pretty page
     if (req.params.fmt == 'json') {
@@ -176,6 +191,43 @@ app.post('/:fmt/evolve/:index', ensureAuthenticated, function (req, res) {
             oldspecies: oldspecies
         });
     }
+});
+app.post('/:fmt/breed/:index', ensureAuthenticated, function (req, res) {
+    var team = critterdb[req.user.identifier].team;
+    var index = parseInt(req.params.index);
+    if (index >= team.length || index < 0)
+        return res.redirect('/'+req.params.fmt+'/my/team');
+    // if (critter.xp != 100)
+    //     return res.redirect('/'+req.params.fmt+'/my/team');
+
+    res.render('breed', {
+        title: 'Breed with?',
+        user: req.user,
+        team: team,
+        index: index
+    });
+});
+app.post('/:fmt/breed/:index/:index2', ensureAuthenticated, function (req, res) {
+    var team = critterdb[req.user.identifier].team;
+    var index = parseInt(req.params.index);
+    if (index >= team.length || index < 0)
+        return res.redirect('/'+req.params.fmt+'/my/team');
+    var index2 = parseInt(req.params.index2);
+    if (index2 >= team.length || index2 < 0)
+        return res.redirect('/'+req.params.fmt+'/my/team');
+    // if (critter.xp != 100)
+    //     return res.redirect('/'+req.params.fmt+'/my/team');
+
+    // Process breeding
+    // Perform actual data update
+    var c1 = team[index];
+    var c2 = team[index2];
+    var g = genes.cross_genomes(c1.genome, c2.genome);
+    var c3 = critter_of_genome(g, c2.name);
+    team[index] = c3;
+    team.splice(index2, 1);
+
+    res.redirect('/'+req.params.fmt+'/my/team');
 });
 
 /////////////////////////////////

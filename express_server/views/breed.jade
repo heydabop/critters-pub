@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  h3 Breed with?
+  ul
+    - for (var x in team)
+      if x != index
+        li.critter
+          img(src="/images/#{team[x].species}.png")
+          p.xp XP: #{team[x].xp}
+          p.hue Hue: #{team[x].hue}
+          p.name= team[x].name
+          div.meterbox
+            div.meter
+              span(style="width: #{team[x].xp}%")
+          if team[x].xp === 100 && team[x].tier === 2
+            a.cover(href="#",onclick="breedwith(#{index},#{x});")
+              | BREED
+          else
+            a.cover(href="#",onclick="false;",style="background-color:rgba(128,128,128,0.5);opacity:1.0;")
+              | NOT
+              br
+              | READY
+      else
+        li.critter
+          img(src="/images/#{team[x].species}.png")
+          p.xp XP: #{team[x].xp}
+          p.hue Hue: #{team[x].hue}
+          p.name= team[x].name
+          div.meterbox
+            div.meter
+              span(style="width: #{team[x].xp}%")
+          a.cover(href="/html/my/team",style="background-color:rgba(128,128,128,0.5);opacity:1.0;color:#aa3333;")
+            | CANCEL

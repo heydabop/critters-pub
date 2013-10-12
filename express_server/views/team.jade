@@ -6,14 +6,17 @@ block content
       li.critter
         img(src="/images/#{team[x].species}.png")
         p.xp XP: #{team[x].xp}
-        p.hue Hue: #{team[x].hue}
+        //p.hue Hue: #{team[x].hue}
         p.name= team[x].name
         div.meterbox
           div.meter
             span(style="width: #{team[x].xp}%")
-        if team[x].xp === 100
-          a.cover(href="#",onclick="if(evolveme!==undefined) evolveme(#{x});return false;")
+        if team[x].xp === 100 && team[x].tier === 1
+          a.cover(href="#",onclick="evolveme(#{x});")
             | EVOLVE ME!
+        else if team[x].xp === 100 && team[x].tier === 2
+          a.cover(href="#",onclick="breedwith(#{x});")
+            | BREED ME!
         else
-          a.cover(href="#",onclick="if(feedme!==undefined) feedme(#{x});return false;")
+          a.cover(href="#",onclick="feedme(#{x});")
             | FEED ME!

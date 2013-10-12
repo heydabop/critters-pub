@@ -27,7 +27,15 @@ function feedme(n) {
 }
 
 function evolveme(n) {
-    post_to_url("/html/evolve/" + n, { loc: document.location });
+    post_to_url("/html/evolve/" + n, {});
+}
+
+function breedwith(a,b) {
+    if (b === undefined) {
+        return post_to_url("/html/breed/" + a, {});
+    } else {
+        return post_to_url("/html/breed/" + a + "/" + b, {});
+    }
 }
 
 
@@ -48,7 +56,7 @@ function animate_evolve() {
                 // Now go to animating the new one!
                 $("#oldspecies").css("display", "none");
                 cb();
-            }, 1000);
+            }, 200);
         });
     }
     f(function () {
