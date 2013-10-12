@@ -9,5 +9,19 @@ var oauth = ChromeExOAuth.initBackgroundPage({
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    oauth.authorize(function(){});
+    oauth.authorize(onAuthorized);
 });
+
+function useEmail(resp, xhr){
+    var email = JSON.parse(resp).data.email;
+    alert(email);
+};
+
+function onAuthorized(){
+    var url = 'https://www.googleapis.com/userinfo/email'
+    var request = {
+        'method': 'GET',
+        'parameters': {'alt': 'json'}
+    };
+    oauth.sendSignedRequest(url, useEmail, request);
+};
