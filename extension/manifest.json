@@ -8,20 +8,11 @@
     "permissions": [
         "activeTab",
         "tabs",
-        "https://www.google.com/accounts/OAuthGetRequestToken",
-        "https://www.google.com/accounts/OAuthAuthorizeToken",
-        "https://www.google.com/accounts/OAuthGetAccessToken"
+        "http://*/"
     ],
 
-    "background": {
-        "scripts": [
-            "chrome_ex_oauthsimple.js",
-            "chrome_ex_oauth.js",
-            "background.js"
-        ]
-    },
-
     "browser_action": {
-        "default_icon": "img/icon.png"
+        "default_icon": "img/icon.png",
+        "default_popup": "popup.html"
     }
 }
