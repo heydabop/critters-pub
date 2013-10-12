@@ -224,6 +224,12 @@ app.post('/:fmt/breed/:index/:index2', ensureAuthenticated, function (req, res) 
     var c1 = team[index];
     var c2 = team[index2];
     var g = genes.cross_genomes(c1.genome, c2.genome);
+    if (g === undefined) {
+        // Breeding failed.
+        team.splice(index2, 1);
+        res.redirect('/'+req.params.fmt+'/my/team');
+        return;
+    }
     var c3 = critter_of_genome(g, c2.name);
     team[index] = c3;
     team.splice(index2, 1);

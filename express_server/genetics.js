@@ -6,361 +6,137 @@ function flipACoin() {
     return Math.floor(Math.random() * 2);
 }
 
-var specs = ["ball", "ball2", "disk", "duck", "duck2", "plant-nin2", "plant1", "plant2"];
+// The species are determined as follows:
+//
+// A and D are dominant, b c e f are recessive.
+// The AD phenotype is illegal
 
+// Therefore, the species are [A, b, c, bc] x [D, e, f, ef]
+
+// A -> no type
+// b -> fire
+// c -> plant
+// d -> chaos
+
+// D -> no profession
+// e -> ninja
+// f -> ???
+// g -> robot
+
+function dominance(a) {
+    if (a[0] == a[1])
+        return a[0];
+    
+    var u1 = (a[0] == a[0].toUpperCase());
+    var u2 = (a[1] == a[1].toUpperCase());
+    if (u1 && u2)
+        if (a[0] > a[1])
+            return a[0] + a[1];
+        else
+            return a[1] + a[0];
+
+    if (u1) return a[0];
+    if (u2) return a[1];
+
+    if (a[0] > a[1])
+        return a[0] + a[1];
+    else
+        return a[1] + a[0];
+}
+
+var starters = ["fire1", "plant1", "ninja1"];
+
+// fire1 = bbDf-HhHHHH
+// plant1 = ccDf-HHHhHH
+// ninja1 = Acgg-HHHHHh
 
 function new_genome(species) { //here is a new thingy, make genome
-    var trans = { "plant1": "AbDf",
-		              "plant2": "cbef" };
-	  var trans1 = { "plant1" : "AAaaaa", "plant2": "aaAAaa" };
-	  var trans2 = { "plant1" : "Da", "plant2": "Db" };
-		
-	  var genome = { species : trans[species], hue: 0, colorPattern: 0 };
-	  if(genome.species == undefined)
-	  {
-	      genome.species = "AaDd";
-	  }
-	  if(genome.hue == undefined)
-	  {
-	      genome.hue = "AAaaaa";
-	  }
-	  if(genome.colorPattern == undefined)
-	  {
-	      genome.colorPattern = "Da";
-	  }
-	  genome.exprSpec = getPhenSpec(genome);
-	  genome.exprHue = getPhenHue(genome);
-	  genome.exprColorP = getPhenCP(genome);
-	  return genome;
+    return {
+        "fire1": {
+            s0: ['b', 'b'],
+            s1: ['D', 'f'],
+
+            h0: ['H', 'h'],
+            h1: ['H', 'H'],
+            h2: ['H', 'H']
+        },
+        "plant1": {
+            s0: ['c', 'c'],
+            s1: ['D', 'f'],
+
+            h0: ['H', 'H'],
+            h1: ['H', 'h'],
+            h2: ['H', 'H']
+        },
+        "ninja1": {
+            s0: ['A', 'c'],
+            s1: ['g', 'g'],
+
+            h0: ['H', 'H'],
+            h1: ['H', 'H'],
+            h2: ['H', 'h']
+        }
+    }[species];
 }
 
-function get_species(genome) { //make species number into string
-	  switch(genome.exprSpec)
-	  {
-	  case 0:
-	      return "eoo";
-	      break;
-	  case 1:
-	      return "foo";
-	      break;
-	  case 2:
-	      return "goo";
-	      break;
-	  case 3:
-	      return "hoo";
-	      break;
-	  case 4:
-	      return "ioo";
-	      break;
-	  case 5:
-	      return "joo";
-	      break;
-	  case 6:
-	      return "koo";
-	      break;
-	  case 7:
-	      return "loo";
-	      break;
-	  case 8:
-	      return "moo";
-	      break;
-	  case 9:
-	      return "noo";
-	      break;
-	  case 10:
-	      return "ooo";
-	      break;
-	  case 11:
-	      return "poo";
-	      break;
-	  case 12:
-	      return "qoo";
-	      break;
-	  case 13:
-	      return "roo";
-	      break;
-	  case 14:
-	      return "soo";
-	      break;
-	  case 15:
-	      return "too";
-	      break;
+function get_species(genome) {
+    var p0 = dominance(genome.s0);
+    var p1 = dominance(genome.s1);
+    var lookup0 = {'A':0, 'b':1, 'c':2, 'bc':3}[p0];
+    var lookup1 = {'D':0, 'e':1, 'f':2, 'ef':3}[p1];
+    // Species Matrix.
+    // Row is notype/fire/plant/chaos
+    // Col is noprof/ninja/???/robot
+    return [
+        [undefined, "ninja", "polit", "robot"],
+        ["fire", "fire-ninja", "fire-polit", "fire-robot"],
+        ["plant", "plant-ninja", "plant-polit", "plant-robot"],
+        ["chaos", "chaos-ninja", "chaos-polit", "chaos-robot"]
+    ][lookup0][lookup1];
+}
+
+function cross_genomes(n1, n2) {
+    function cross_gene(g1, g2) {
+        return [g1[flipACoin()], g1[flipACoin()]];
     }
-}
 
-function cross_spec(gen1, gen2) {
-    loc1 = gen1.substr(0,2);
-	  loc2 = gen1.substr(2,2);
-	  loc3 = gen2.substr(0,2);
-	  loc4 = gen2.substr(2,2);
-	  allele1 = loc1.charAt(flipACoin());
-	  allele2 = loc2.charAt(flipACoin());
-	  allele3 = loc3.charAt(flipACoin());
-	  allele4 = loc4.charAt(flipACoin());
-	  if(allele1 == allele1.toUpperCase() && allele3 == allele3.toUpperCase())
-	  {
-	      if(allele2 == allele2.toUpperCase() && allele4 == allele4.toUpperCase())
-	      {
-	          cross_spec(gen1,gen2);
-	      }
-	  }
-	  specresult = allele1 + allele3 + allele2 + allele4;
-	  return specresult;
-}
+    var result = {
+        s0: cross_gene(n1.s0, n2.s0),
+        s1: cross_gene(n1.s1, n2.s1),
+        
+        h0: cross_gene(n1.h0, n2.h0),
+        h1: cross_gene(n1.h1, n2.h1),
+        h2: cross_gene(n1.h2, n2.h2)
+    };
+    if (get_species(result) === undefined) {
+        if (Math.random() >= 0.1)
+            return cross_genomes(n1, n2);
+        else
+            return undefined;
+    }
 
-function cross_hue(gen1, gen2) {
-    loc1 = gen1.substr(0,2);
-    loc2 = gen1.substr(2,2);
-    loc3 = gen1.substr(4,2);
-    loc4 = gen2.substr(0,2);
-    loc5 = gen2.substr(2,2);
-    loc6 = gen2.substr(4,2);
-    allele1 = loc1.charAt(flipACoin());
-    allele2 = loc2.charAt(flipACoin());
-    allele3 = loc3.charAt(flipACoin());
-    allele4 = loc4.charAt(flipACoin());
-    allele5 = loc5.charAt(flipACoin());
-    allele6 = loc6.charAt(flipACoin());
-    hueresult = allele1 + allele2 + allele3 + allele4 + allele5 + allele6;
-    return hueresult;
-}
-
-function cross_CP(gen1){
-    loc1 = gen1.substr(0,2);
-    loc2 = gen2.substr(0,2);
-    allele1 = loc1.charAt(flipACoin());
-    allele2 = loc2.charAt(flipACoin());
-    cpresult = allele1 + allele2;
-    return cpresult;
-}
-
-function cross_genomes(genome1, genome2){
-    cross_spec(genome1.species, genome2.species);
-    cross_hue(genome1.hue, genome2.hue);
-    cross_CP(genome1.colorPattern, genome2.colorPattern);
-}
-
-function get_starter_species() { //return list of starter species
-    return ["plant1", "ball"];
+    return result;
 }
 
 function get_hue(genome) { return 0; } //return hue number
 
-function getPhenSpec(gen)
-{
-    var loc1 = gen.species.substr(0,1);
-    var loc2 = gen.species.substr(1,1);
-    var gen1 = new Array(loc1, loc2);
-    var loc3 = gen.species.substr(2,1);
-    var loc4 = gen.species.substr(3,1);
-    var gen2 = new Array(loc3, loc4);
-    gen1.sort();
-    gen2.sort();
-
-    if(gen1[0] == gen1[0].toUpperCase())
-    {
-        phe1 = gen1[0];
-    }
-    else if(gen1[1] == gen1[1].toUpperCase())
-    {
-        phe1 = gen1[1];
-    }
-    else if(gen1[0] === gen1[1])
-    {
-        phe1 = gen1[0];
-    }
-    else
-    {
-        phe1 = gen1[0].concat(gen1[1]);
-    }
-
-    if(gen2[0] == gen2[0].toUpperCase())
-    {
-        phe2 = gen2[0];
-    }
-    else if(gen2[1] == gen2[1].toUpperCase())
-    {
-        phe2 = gen2[1];
-    }
-    else if(gen2[0] === gen2[1])
-    {
-        phe2 = gen2[0];
-    }
-    else
-    {
-        phe2 = gen2[0].concat(gen2[1]);
-    }
-
-    gentot=phe1.concat(phe2);
-    console.log(gentot);
-
-    switch(gentot)
-    {
-    case "AD":
-        return 0;
-        break;
-    case "Ae":
-        return 1;
-        break;
-    case "Af":
-        return 2;
-        break;
-    case "Aef":
-        return 3;
-        break;
-    case "bD":
-        return 4;
-        break;
-    case "be":
-        return 5;
-        break;
-    case "bf":
-        return 6;
-        break;
-    case "bef":
-        return 7;
-        break;
-    case "cD":
-        return 8;
-        break;
-    case "ce":
-        return 9;
-        break;
-    case "cf":
-        return 10;
-        break;
-    case "cef":
-        return 11;
-        break;
-    case "bcD":
-        return 12;
-        break;
-    case "bce":
-        return 13;
-        break;
-    case "bcf":
-        return 14;
-        break;
-    case "bcef":
-        return 15;
-        break;
-    default: return 0; break;
-    }
-}
-
-function getPhenHue(genome)
-{ 
-    var loc1 = genome.hue.substr(0,1);
-    var loc2 = genome.hue.substr(1,1);
-    var gen1 = new Array(loc1, loc2);
-    var loc3 = genome.hue.substr(2,1);
-    var loc4 = genome.hue.substr(3,1);
-    var gen2 = new Array(loc3, loc4);
-    var loc5 = genome.hue.substr(4,1);
-    var loc6 = genome.hue.substr(5,1);
-    var gen3 = new Array(loc5, loc6);
-    gen1.sort();
-    gen2.sort();
-    gen3.sort();
-    var phe1;
-    var phe2;
-    if(gen1[0] == toUpperCase(gen1[0]))
-    {
-        phe1 = gen1[0];
-    }
-    else 
-    {
-        phe1 = gen1[1];
-    }
-    if(gen2[0] == toUpperCase(gen2[0]))
-    {
-        phe2 = gen2[0];
-    }
-    else 
-    {
-        phe2 = gen2[1];
-    }if(gen3[0] == toUpperCase(gen3[0]))
-    {
-        phe3 = gen3[0];
-    }
-    else 
-    {
-        phe3 = gen3[1];
-    }
-    var gentot = phe1 + phe2 + phe3;
-    switch(gentot)
-    {
-    case AAA:
-        return 1;
-        break;
-    case AAa:
-        return 2;
-        break;
-    case AaA:
-        return 3;
-        break;
-    case Aaa:
-        return 4;
-        break;
-    case aAA:
-        return 5;
-        break;
-    case aAa:
-        return 6;
-        break;
-    case aaA:
-        return 7;
-        break;
-    case aaa:
-        return 8;
-        break;
-    }
-}
-
-
-function getPhenCP(genome){ 
-    var loc1 = genome.hue.substr(0,1);
-    var loc2 = genome.hue.substr(1,1);
-    if(loc1 !== loc2)
-    {
-        var phe =  'd'
-    }
-    else
-    {
-        var phe = loc1;
-    }
-    switch (phe)
-    {
-    case a:
-        return 1;
-        break;
-    case b:
-        return 2
-        break;
-    case c:
-        return 3;
-        break;
-    case d:
-        return 4;
-        break;
-    }
-}
-
 function evolve_species(species) {
-    var s;
+    return species + '2';
+    // var s;
 
-    do {
-        s = select_random(specs);
-    } while (s === species);
+    // do {
+    //     s = select_random(specs);
+    // } while (s === species);
 
-    return s;
+    // return s;
 }
 
 
-module.exports = { new_genome: new_genome,
-                   get_species: get_species,
-                   get_hue: get_hue,
-                   cross_genomes: cross_genomes,
-                   get_starter_species: get_starter_species,
-                   evolve_species: evolve_species
-                 }
+module.exports = {
+    new_genome: new_genome,
+    get_species: get_species,
+    get_hue: get_hue,
+    cross_genomes: cross_genomes,
+    get_starter_species: function () { return starters; },
+    evolve_species: evolve_species
+}
