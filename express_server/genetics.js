@@ -51,6 +51,9 @@ var starters = ["fire", "plant", "ninja"];
 // ninja1 = Acgg-HHHHHh
 
 function new_genome(species) { //here is a new thingy, make genome
+    if (!(species in starters)) {
+        console.error("UNDEFINED SPECIES");
+    }
     return {
         "fire": {
             s0: ['b', 'b'],
@@ -97,7 +100,7 @@ function get_species(genome) {
 
 function cross_genomes(n1, n2) {
     function cross_gene(g1, g2) {
-        return [g1[flipACoin()], g1[flipACoin()]];
+        return [g1[flipACoin()], g2[flipACoin()]];
     }
 
     var result = {
