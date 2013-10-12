@@ -128,4 +128,4 @@ function go_do(image) {
     foo();
 }
 
-alert(JSON.stringify(analyze_page(get_elems())));
+//alert(JSON.stringify(analyze_page(get_elems())));
