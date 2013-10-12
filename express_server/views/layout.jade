@@ -1,0 +1,19 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    if user !== undefined
+      div.welcomebox
+        p.
+          Welcome, #{JSON.stringify(user)}!
+        a(href="/logout") Logout
+        br
+        a(href="/rest/my/team") View my team
+        br
+        form(action="/rest/my/team/push",method="push")
+          input(type="submit",value="Add a new team member")
+     else
+      a(href="/auth/google") Sign In with Google
+    block content
