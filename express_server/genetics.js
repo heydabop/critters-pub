@@ -239,6 +239,9 @@ default: return 0; break;
 }
 }
 
+getPhenHue(genome){ return 0; }
+getPhenCP(genome){ return 0; }
+
 function evolve_species(species) {
     var s;
 
