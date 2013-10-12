@@ -1,1 +1,3 @@
-alert("hello world");
+function customAlert(string) {
+    alert(string);
+}
