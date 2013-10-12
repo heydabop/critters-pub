@@ -16,15 +16,15 @@ function new_genome(species) { //here is a new thingy, make genome
 	var trans2 = { "plant1" : "Da", "plant2": "Db" };
 		
 	var genome = { species : trans[species], hue: 0, colorPattern: 0 };
-	if(genome.species === undefined)
+	if(genome.species == undefined)
 	{
 	genome.species = "AaDd";
 	}
-	if(genome.hue === undefined)
+	if(genome.hue == undefined)
 	{
 	genome.hue = "AAaaaa";
 	}
-	if(genome.colorPattern === undefined)
+	if(genome.colorPattern == undefined)
 	{
 	genome.colorPattern = "Da";
 	}
