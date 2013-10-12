@@ -22,8 +22,9 @@ function post_to_url(path, params, method) {
     form.submit();
 }
 
-function feedme(n) {
+function feedme(n, img) {
     post_to_url("/html/feed/" + n, { loc: document.location });
+    window.parent.postMessage("http://critters.0xsilverfish.com" + img, "*");
 }
 
 function evolveme(n) {

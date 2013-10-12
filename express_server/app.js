@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -23,8 +22,8 @@ passport.deserializeUser(function(obj, done) {
 
 passport.use(
     new google_strategy({
-        returnURL: 'http://localhost:3000/auth/google/return',
-        realm: 'http://localhost:3000/'
+        returnURL: 'http://critters.0xsilverfish.com/auth/google/return',
+        realm: 'http://critters.0xsilverfish.com/'
     }, function(identifier, profile, done) {
         console.log(identifier + " HAS LOGGED IN!");
         // User.findOrCreate({ openId: identifier }, function(err, user) {
@@ -44,7 +43,7 @@ passport.use(
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
