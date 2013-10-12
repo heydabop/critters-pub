@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1= title
+  ul
+    - for (var x in team)
+      li.critter
+        img(src="/images/#{team[x].species}.png")
+        p.xp XP: #{team[x].xp}
+        p.hue Hue: #{team[x].hue}
+        p.name= team[x].name
+        div.meterbox
+          div.meter
+            span(style="width: #{team[x].xp}%")
+        if team[x].xp === 100
+          a.cover(href="#",onclick="if(evolveme!==undefined) evolveme(#{x});return false;")
+            | EVOLVE ME!
+        else
+          a.cover(href="#",onclick="if(feedme!==undefined) feedme(#{x});return false;")
+            | FEED ME!

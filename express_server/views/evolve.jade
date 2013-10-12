@@ -1,0 +1,17 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    img#oldspecies.absolute-center(src="/images/#{oldspecies}.png")
+    img#newspecies.absolute-center(src="/images/#{critter.species}.png")
+    a.starburst-animate.starburst.absolute-center.hidden(href="#")
+      span.starburst-animate
+        span.starburst-animate
+          span.starburst-animate
+
+    script(type="text/javascript",
+           src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+    script(type="text/javascript", src="/javascripts/client.js")
+    script(type="text/javascript") $(function(){ animate_evolve(); });

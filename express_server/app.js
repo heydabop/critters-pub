@@ -29,10 +29,15 @@ passport.use(
         // User.findOrCreate({ openId: identifier }, function(err, user) {
         //   done(err, user);
         // });
-        process.nextTick(function () {
-            profile.identifier = identifier;
-            return done(null, profile);
-        });
+
+        if (!(identifier in critterdb)) {
+            var newaccount = { team: [rand_starter()] };
+            newaccount.team[0].xp = 20;
+            critterdb[identifier] = newaccount;
+        }
+
+        profile.identifier = identifier;
+        return done(null, profile);
     }));
 
 var app = express();
@@ -83,31 +88,91 @@ app.get('/logout', function(req, res){
 
 var critterdb = {};
 
-function dblookup(id) {
-    if (!(id in critterdb)) {
-        var critter = {pic0: "foo.png", pic1: "foo.png", pic2: "foo.png", hue: 0};
-        critterdb[id] = [critter];
-    }
-    return critterdb[id];
+function select_random(myArray) {
+    return myArray[Math.floor(Math.random() * myArray.length)];
 }
 
-app.get('/rest/my/team', ensureAuthenticated, function (req, res) {
-    var team = dblookup(req.user.identity);
-    var body = JSON.stringify(team);
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Content-Length', body.length);
-    res.end(body);
-});
-app.post('/rest/my/team/push', ensureAuthenticated, function (req, res) {
-    var team = dblookup(req.user.identity);
-    team.push(0);
+var crittertypes = ["ball", "ball2", "disk", "duck", "duck2", "plant-nin2", "plant1", "plant2"];
+function rand_starter() {
+    var rand = select_random(crittertypes);
+    var critter = { species: rand, hue: 0, xp: 5 };
+    return critter;
+}
 
-    res.redirect('/my/team');
+app.get('/:fmt/my/team', ensureAuthenticated, function (req, res) {
+    var team = critterdb[req.user.identifier].team;
+
+    if (req.params.fmt == 'json') {
+        var body = JSON.stringify(team);
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Length', body.length);
+        res.end(body);
+    } else {
+        res.render('team', {
+            title: 'My Team',
+            user: req.user,
+            team: team
+        });
+    }
+});
+app.post('/:fmt/my/team/push', ensureAuthenticated, function (req, res) {
+    var team = critterdb[req.user.identifier].team;
+    if (team.length < 4)
+        team.push(rand_starter());
+
+    res.redirect('/'+req.params.fmt+'/my/team');
 
     // var body = JSON.stringify(team);
     // res.setHeader('Content-Type', 'application/json');
     // res.setHeader('Content-Length', body.length);
     // res.end(body);
+});
+app.post('/:fmt/feed/:index', ensureAuthenticated, function (req, res) {
+    (function () {
+        var team = critterdb[req.user.identifier].team;
+        var index = parseInt(req.params.index);
+        if (index >= team.length || index < 0)
+            return;
+        // Process feeding here
+        team[index].xp += Math.floor(Math.random() * 20);
+        if (team[index].xp >= 100)
+            team[index].xp = 100;
+        return;
+    })();
+
+    return res.redirect('/'+req.params.fmt+'/my/team');
+});
+app.post('/:fmt/evolve/:index', ensureAuthenticated, function (req, res) {
+    var team = critterdb[req.user.identifier].team;
+    var index = parseInt(req.params.index);
+    if (index >= team.length || index < 0)
+        return res.redirect('/'+req.params.fmt+'/my/team');
+    var critter = team[index];
+    // if (critter.xp != 100)
+    //     return res.redirect('/'+req.params.fmt+'/my/team');
+
+    // Process evolution
+    // Perform actual data update
+    var oldspecies = critter.species;
+    while (critter.species == oldspecies) {
+        critter.species = select_random(crittertypes);
+    }
+    critter.xp = 0;
+
+    // If requested, send the user a pretty page
+    if (req.params.fmt == 'json') {
+        var body = JSON.stringify(team);
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Length', body.length);
+        res.end(body);
+    } else {
+        res.render('evolve', {
+            title: 'IS EVOLVING',
+            user: req.user,
+            critter: critter,
+            oldspecies: oldspecies
+        });
+    }
 });
 
 /////////////////////////////////
