@@ -44,7 +44,7 @@ function dominance(a) {
         return a[1] + a[0];
 }
 
-var starters = ["fire1", "plant1", "ninja1"];
+var starters = ["fire", "plant", "ninja"];
 
 // fire1 = bbDf-HhHHHH
 // plant1 = ccDf-HHHhHH
@@ -52,7 +52,7 @@ var starters = ["fire1", "plant1", "ninja1"];
 
 function new_genome(species) { //here is a new thingy, make genome
     return {
-        "fire1": {
+        "fire": {
             s0: ['b', 'b'],
             s1: ['D', 'f'],
 
@@ -60,7 +60,7 @@ function new_genome(species) { //here is a new thingy, make genome
             h1: ['H', 'H'],
             h2: ['H', 'H']
         },
-        "plant1": {
+        "plant": {
             s0: ['c', 'c'],
             s1: ['D', 'f'],
 
@@ -68,7 +68,7 @@ function new_genome(species) { //here is a new thingy, make genome
             h1: ['H', 'h'],
             h2: ['H', 'H']
         },
-        "ninja1": {
+        "ninja": {
             s0: ['A', 'c'],
             s1: ['g', 'g'],
 

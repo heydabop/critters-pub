@@ -224,6 +224,10 @@ app.post('/:fmt/breed/:index/:index2', ensureAuthenticated, function (req, res) 
     var c1 = team[index];
     var c2 = team[index2];
     var g = genes.cross_genomes(c1.genome, c2.genome);
+    console.log("BREEDING===");
+    console.log(JSON.stringify(c1.genome));
+    console.log(JSON.stringify(c2.genome));
+    console.log(JSON.stringify(g));
     if (g === undefined) {
         // Breeding failed.
         team.splice(index2, 1);
