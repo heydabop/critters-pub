@@ -4,16 +4,18 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    if user !== undefined
-      div.welcomebox
-        p.
-          Welcome, #{user.displayName}!
-        a(href="/logout") Logout
-        br
-        a(href="/html/my/team") View my team
-        br
-        a(href="#",onclick="add_team_member()") Recruit a Critter
-     else
-      a(href="/auth/google") Sign In with Google
-    block content
+    div.content
+      if user !== undefined
+        div.welcomebox
+          p.
+            Welcome, #{user.displayName}!
+          a(href="/html/my/team") View my team
+          br
+          a(href="#",onclick="add_team_member()") Recruit a Critter
+          br
+          a(href="/logout") Logout
+      else
+        a(href="/auth/google") Sign In with Google
+    div.content
+      block content
     script(type="text/javascript", src="/javascripts/client.js")
