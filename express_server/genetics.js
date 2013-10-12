@@ -10,34 +10,6 @@ var specs = ["ball", "ball2", "disk", "duck", "duck2", "plant-nin2", "plant1", "
 
 
 function new_genome(species) { //here is a new thingy, make genome
-    switch(species)
-	  {
-	  case "plant1":
-	      var genome = {
-	          species : "AbDf",
-	          hue : 0,
-	          colorPattern : 0,
-	          exprSpec : 0,
-	          exprHue : 0,
-	          exprColorP : 0
-	      }
-	      return genome;
-	      break;
-	  case "plant2":
-	      var genome = {
-	          species : "cbef",
-	          hue		: 0,
-	          colorPattern : 0,
-	          exprSpec : 0,
-	          exprHue : 0,
-	          exprColorP : 0
-	      }
-	      genome.exprSpec = getPhenSpec(genome);
-	      genome.exprHue = getPhenHue(genome);
-	      genome.exprColorP = getPhenCP(genome);
-	      return genome;
-    }
-}
 
     var trans = { "plant1": "AbDf",
 		"plant2": "cbef" };
@@ -105,26 +77,6 @@ function get_species(genome) { //make species number into string
 
 function cross_spec(gen1, gen2) {
     loc1 = gen1.substr(0,2);
-	  loc2 = gen1.substr(2,2);
-	  loc3 = gen2.substr(0,2);
-	  loc4 = gen2.substr(2,2);
-	  allele1 = loc1.charAt(flipACoin());
-	  allele2 = loc2.charAt(flipACoin());
-	  allele3 = loc3.charAt(flipACoin());
-	  allele4 = loc4.charAt(flipACoin());
-	  if(allele1 == allele1.toUpperCase() && allele3 == allele3.toUpperCase())
-	  {
-	      if(allele2 == allele2.toUpperCase() && allele4 == allele4.toUpperCase())
-	      {
-	          cross_spec(gen1,gen2);
-	      }
-	  }
-	  specresult = allele1 + allele3 + allele2 + allele4;
-	  genome ={
-	      species : specresult
-	  }
-	  return genome;
-
 	loc2 = gen1.substr(2,2);
 	loc3 = gen2.substr(0,2);
 	loc4 = gen2.substr(2,2);
@@ -353,71 +305,6 @@ function getPhenHue(genome)
         return 8;
         break;
     }
-var loc1 = genome.hue.substr(0,1);
-var loc2 = genome.hue.substr(1,1);
-var gen1 = new Array(loc1, loc2);
-var loc3 = genome.hue.substr(2,1);
-var loc4 = genome.hue.substr(3,1);
-var gen2 = new Array(loc3, loc4);
-var loc5 = genome.hue.substr(4,1);
-var loc6 = genome.hue.substr(5,1);
-var gen3 = new Array(loc5, loc6);
-gen1.sort();
-gen2.sort();
-gen3.sort();
-var phe1;
-var phe2;
-if(gen1[0] === toUpperCase(gen1[0]))
-{
-phe1 = gen1[0];
-}
-else 
-{
-phe1 = gen1[1];
-}
-if(gen2[0] === toUpperCase(gen2[0]))
-{
-phe2 = gen2[0];
-}
-else 
-{
-phe2 = gen2[1];
-}if(gen3[0] === toUpperCase(gen3[0]))
-{
-phe3 = gen3[0];
-}
-else 
-{
-phe3 = gen3[1];
-}
-var gentot = phe1 + phe2 + phe3;
-switch(gentot)
-{
-case AAA:
-return 1;
-break;
-case AAa:
-return 2;
-break;
-case AaA:
-return 3;
-break;
-case Aaa:
-return 4;
-break;
-case aAA:
-return 5;
-break;
-case aAa:
-return 6;
-break;
-case aaA:
-return 7;
-break;
-case aaa:
-return 8;
-break;
-}
 }
 
 
