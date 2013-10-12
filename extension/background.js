@@ -1,4 +1,4 @@
 chrome.browserAction.onClicked.addListener(function(activeTab){
-    var newUrl = "http://google.com/";
+    var newUrl = "inventory.html";
     chrome.tabs.create({url: newUrl});
 });
