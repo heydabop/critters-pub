@@ -24,7 +24,7 @@ function post_to_url(path, params, method) {
 
 function feedme(n, img) {
     post_to_url("/html/feed/" + n, { loc: document.location });
-    window.parent.postMessage("http://critters.0xsilverfish.com" + img, "*");
+    window.parent.postMessage(img, "*");
 }
 
 function evolveme(n) {
