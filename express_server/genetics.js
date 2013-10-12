@@ -10,7 +10,6 @@ var specs = ["ball", "ball2", "disk", "duck", "duck2", "plant-nin2", "plant1", "
 
 
 function new_genome(species) { //here is a new thingy, make genome
-<<<<<<< HEAD
     switch(species)
 	  {
 	  case "plant1":
@@ -39,7 +38,7 @@ function new_genome(species) { //here is a new thingy, make genome
 	      return genome;
     }
 }
-=======
+
     var trans = { "plant1": "AbDf",
 		"plant2": "cbef" };
 		
@@ -50,8 +49,6 @@ function new_genome(species) { //here is a new thingy, make genome
 	return genome;
 }
 
-	
->>>>>>> Fixed undefined case for new_genome
 function get_species(genome) { //make species number into string
 	  switch(genome.exprSpec)
 	  {
@@ -108,7 +105,6 @@ function get_species(genome) { //make species number into string
 
 function cross_spec(gen1, gen2) {
     loc1 = gen1.substr(0,2);
-<<<<<<< HEAD
 	  loc2 = gen1.substr(2,2);
 	  loc3 = gen2.substr(0,2);
 	  loc4 = gen2.substr(2,2);
@@ -128,7 +124,7 @@ function cross_spec(gen1, gen2) {
 	      species : specresult
 	  }
 	  return genome;
-=======
+
 	loc2 = gen1.substr(2,2);
 	loc3 = gen2.substr(0,2);
 	loc4 = gen2.substr(2,2);
@@ -156,7 +152,6 @@ function cross_spec(gen1, gen2) {
 	genome.exprHue = getPhenHue(genome);
 	genome.exprColorP = getPhenCP(genome);
 	return genome;
->>>>>>> Fixed undefined case for new_genome
 }
 
 // function cross_hue(gen1, gen2) {
@@ -293,7 +288,6 @@ function getPhenSpec(gen)
 
 function getPhenHue(genome)
 { 
-<<<<<<< HEAD
     var loc1 = genome.hue.substr(0,1);
     var loc2 = genome.hue.substr(1,1);
     var gen1 = new Array(loc1, loc2);
@@ -359,7 +353,6 @@ function getPhenHue(genome)
         return 8;
         break;
     }
-=======
 var loc1 = genome.hue.substr(0,1);
 var loc2 = genome.hue.substr(1,1);
 var gen1 = new Array(loc1, loc2);
@@ -425,7 +418,6 @@ case aaa:
 return 8;
 break;
 }
->>>>>>> Fixed undefined case for new_genome
 }
 
 
