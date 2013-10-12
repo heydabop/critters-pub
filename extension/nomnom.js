@@ -55,7 +55,7 @@ function analyze_page(elems) {
     return points;
 }
 
-function go_do() {
+function go_do(image) {
     console.log($.fn.jquery);
 
     function findPos(obj) {
@@ -72,12 +72,12 @@ function go_do() {
         return [curleft,curtop];
     }
 
-    var imgsrc = "http://076dd0a50e0c1255009e-bd4b8aabaca29897bc751dfaf75b290c.r40.cf1.rackcdn.com/images/files/000/004/445/original/original.0";
+    var imgsrc = image;
 
     var inject = '<img src="' + imgsrc +'" id="critter" style="'+
         'position:absolute;'+
-        'width:39px;'+
-        'height:45px;'+
+        'width:2in;'+
+        'height:2in;'+
         'top:0px;'+
         'left:0px;'+
         'z-index:99999;'+
