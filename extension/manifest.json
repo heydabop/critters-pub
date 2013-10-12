@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+
+    "name": "Critters",
+    "description": "Feed and breed your very own internet devouring critter!",
+    "version": "0.1",
+
+    "permissions": [
+        "history"
+    ],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    }
+}
