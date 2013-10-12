@@ -22,7 +22,7 @@ function new_genome(species) { //here is a new thingy, make genome
 	}
 	if(genome.hue === undefined)
 	{
-	genome.species = "AAaaaa";
+	genome.hue = "AAaaaa";
 	}
 	if(genome.colorPattern === undefined)
 	{
