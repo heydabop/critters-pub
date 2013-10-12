@@ -72,7 +72,7 @@ function go_do(image) {
         return [curleft,curtop];
     }
 
-    var imgsrc = image;
+    var imgsrc = "http://critters.0xsilverfish.com/" + image;
 
     var inject = '<img src="' + imgsrc +'" id="critter" style="'+
         'position:absolute;'+
