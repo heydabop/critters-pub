@@ -85,8 +85,8 @@ function new_genome(species) { //here is a new thingy, make genome
 function get_species(genome) {
     var p0 = dominance(genome.s0);
     var p1 = dominance(genome.s1);
-    var lookup0 = {'A':0, 'b':1, 'c':2, 'bc':3}[p0];
-    var lookup1 = {'D':0, 'e':1, 'f':2, 'ef':3}[p1];
+    var lookup0 = {'A':0, 'b':1, 'c':2, 'cb':3}[p0];
+    var lookup1 = {'D':0, 'e':1, 'f':2, 'fe':3}[p1];
     // Species Matrix.
     // Row is notype/fire/plant/chaos
     // Col is noprof/ninja/???/robot
